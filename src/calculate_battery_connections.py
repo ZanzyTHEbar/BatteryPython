@@ -57,11 +57,12 @@ class CalculateBatteryConnections:
     def __calculate_total_power(self, parallel: bool):
         area: int = self.__calculate_area()
         amps: int = self.__calculate_cell_amps(area)
-        if parallel:
-            total_power = self.__calculate_parallel(amps)
-        else:
-            total_power = self.__calculate_series(amps)
-        return total_power
+
+        return (
+            self.__calculate_parallel(amps)
+            if parallel
+            else self.__calculate_series(amps)
+        )
 
     def display(self, parallel: bool):
         total_power = self.__calculate_total_power(parallel)
@@ -74,4 +75,4 @@ class CalculateBatteryConnections:
 
 if __name__ == "__main__":
     battery = CalculateBatteryConnections(17, 8, 215, 1.25, 50)
-    battery.display(True)
+    battery.display(False)
