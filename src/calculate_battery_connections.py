@@ -36,7 +36,7 @@ class CalculateBatteryConnections:
     def __calculate_cell_amps(self):
         total_power = self.__calculate_area() * self.mA_cm2
         total_power /= 1000
-        print(f"Total power of the battery pack is {total_power} A")
+        print(f"Total Amps of the battery pack is {total_power} A")
         return total_power
 
     def __calculate_series(self):
