@@ -33,21 +33,21 @@ class CalculateBatteryConnections:
         print(f"Area of the battery pack is {area} cm2")
         return area
 
-    def __calculate_cell_amps(self):
-        total_power = self.__calculate_area() * self.mA_cm2
+    def __calculate_cell_amps(self, area: int):
+        total_power = area * self.mA_cm2
         total_power /= 1000
         print(f"Total Amps per cell is {total_power} A")
         return total_power
 
-    def __calculate_series(self):
+    def __calculate_series(self, amps: int):
         series_voltage = self.voltage_per_cell * self.number_of_cells
-        series_power = self.__calculate_cell_amps() * series_voltage
+        series_power = amps * series_voltage
         print(f"Total voltage of the battery pack is {series_voltage} V")
-        print(f"Total Amps of the battery pack is {self.__calculate_cell_amps()} V")
+        print(f"Total Amps of the battery pack is {amps} A")
         return series_power
 
-    def __calculate_parallel(self):
-        parallel_capacity = self.__calculate_cell_amps() * self.number_of_cells
+    def __calculate_parallel(self, amps: int):
+        parallel_capacity = amps * self.number_of_cells
         parallel_power = parallel_capacity * self.voltage_per_cell
         print(f"Total voltage of the battery pack is {self.voltage_per_cell} V")
         print(f"Total Amps of the battery pack is {parallel_capacity} A")
@@ -55,10 +55,12 @@ class CalculateBatteryConnections:
 
     # create a function to calculate the total power of the battery pack using the series and parallel functions based on the number of cells
     def __calculate_total_power(self, parallel: bool):
+        area: int = self.__calculate_area()
+        amps: int = self.__calculate_cell_amps(area)
         if parallel:
-            total_power = self.__calculate_parallel()
+            total_power = self.__calculate_parallel(amps)
         else:
-            total_power = self.__calculate_series()
+            total_power = self.__calculate_series(amps)
         return total_power
 
     def display(self, parallel: bool):
