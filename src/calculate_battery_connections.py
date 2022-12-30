@@ -33,30 +33,43 @@ class CalculateBatteryConnections:
 
     def __calculate_area(self):
         area = self.length * self.width
-        print(Fore.GREEN + f"Area of the battery pack is {area} cm2")
+        print(
+            Fore.GREEN
+            + f"Area of the battery pack is: {Fore.BLUE}{area} cm2{Fore.GREEN}"
+        )
         return area
 
     def __calculate_cell_amps(self, area: int):
         total_power = area * self.mA_cm2
         total_power /= 1000
-        print(Fore.GREEN + f"Total Amps per cell is {total_power} A")
+        print(
+            Fore.GREEN
+            + f"Total Amps per cell is: {Fore.BLUE}{total_power} A{Fore.GREEN}"
+        )
         return total_power
 
     def __calculate_series(self, amps: int):
         series_voltage = self.voltage_per_cell * self.number_of_cells
         series_power = amps * series_voltage
-        print(Fore.GREEN + f"Total voltage of the battery pack is {series_voltage} V")
-        print(Fore.GREEN + f"Total Amps of the battery pack is {amps} A")
+        print(
+            Fore.GREEN
+            + f"Total voltage of the battery pack is: {Fore.BLUE}{series_voltage} V{Fore.GREEN}"
+        )
+        print(
+            Fore.GREEN
+            + f"Total Amps of the battery pack is: {Fore.BLUE}{amps} A{Fore.GREEN}"
+        )
         return series_power
 
     def __calculate_parallel(self, amps: int):
         parallel_capacity = amps * self.number_of_cells
         parallel_power = parallel_capacity * self.voltage_per_cell
         print(
-            Fore.GREEN
-            + f"Total voltage of the battery pack is {self.voltage_per_cell} V"
+            f"{Fore.GREEN} Total voltage of the battery pack is: {Fore.BLUE}{self.voltage_per_cell} V{Fore.GREEN}"
         )
-        print(Fore.GREEN + f"Total Amps of the battery pack is {parallel_capacity} A")
+        print(
+            f"{Fore.GREEN} Total Amps of the battery pack is: {Fore.BLUE}{parallel_capacity} A{Fore.GREEN}"
+        )
         return parallel_power
 
     # create a function to calculate the total power of the battery pack using the series and parallel functions based on the number of cells
@@ -74,15 +87,22 @@ class CalculateBatteryConnections:
         total_power = self.__calculate_total_power(parallel)
         if total_power > 1000:
             total_power /= 1000
-            print(f"Total power of the battery pack is {total_power} kW")
+            print(
+                f"Total power of the battery pack is: {Fore.BLUE}{total_power} kW{Fore.GREEN}"
+            )
+            print(Style.RESET_ALL)
             return
-        print(f"Total power of the battery pack is {total_power} W")
+        print(
+            f"Total power of the battery pack is: {Fore.BLUE}{total_power} W {Fore.GREEN}"
+        )
+        print(Style.RESET_ALL)
 
 
 def handle_input(args):
     for key, value in args.items():
         if not key:
             return False
+        print()
         print(Fore.YELLOW + value)
         print(Fore.BLUE + "")
         if key == "parallel":
