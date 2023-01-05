@@ -4,8 +4,9 @@ from colorama import Fore, Back, Style
 class CalculateBatteryConnections:
     def __init__(
         self,
-        length: int,
-        width: int,
+        area: int,
+        length: float,
+        width: float,
         mA_cm2: int,
         voltage_per_cell: float,
         number_of_cells: int,
@@ -27,12 +28,20 @@ class CalculateBatteryConnections:
         """
         self.length = length
         self.width = width
+        self.area = area
         self.mA_cm2 = mA_cm2
         self.voltage_per_cell = voltage_per_cell
         self.number_of_cells = number_of_cells
 
     def __calculate_area(self):
-        area = self.length * self.width
+        return self.length * self.width
+
+    def __area(self):
+        if self.length == 0 or self.width == 0:
+            area = self.area
+        else:
+            area = self.__calculate_area()
+
         print(
             Fore.GREEN
             + f"Area of the battery pack is: {Fore.BLUE}{area} cm2{Fore.GREEN}"
@@ -74,7 +83,7 @@ class CalculateBatteryConnections:
 
     # create a function to calculate the total power of the battery pack using the series and parallel functions based on the number of cells
     def __calculate_total_power(self, parallel: bool):
-        area: int = self.__calculate_area()
+        area: int = self.__area()
         amps: int = self.__calculate_cell_amps(area)
 
         return (
@@ -106,8 +115,9 @@ def handle_input(args):
         print(Fore.YELLOW + value)
         print(Fore.BLUE + "")
         if key == "parallel":
-            input_values["parallel"]: True if input() == "p" else False
-        elif key == "voltage_per_cell":
+            if input() == "p":
+                input_values["parallel"] = True
+        elif key == "voltage_per_cell" or key == "length" or key == "width":
             input_values[key] = float(input())
         else:
             input_values[key] = int(input())
@@ -116,8 +126,9 @@ def handle_input(args):
 
 # create a dictionary to store the input messages
 input_messages = {
-    "length": "Enter the length of the battery pack in cm: ",
-    "width": "Enter the width of the battery pack in cm: ",
+    "area": "Enter the total area in cm2 (if you know it): ",
+    "length": "Enter the length of the battery pack in cm (if you didnt enter the area): ",
+    "width": "Enter the width of the battery pack in cm (if you didnt enter the area): ",
     "mA_cm2": "Enter the current density per cm2 of a single cell (mA/cm2): ",
     "voltage_per_cell": "Enter the voltage for a single cell: ",
     "number_of_cells": "Enter the total number of cells: ",
@@ -125,8 +136,9 @@ input_messages = {
 }
 
 input_values = {
-    "length": 0,
-    "width": 0,
+    "area": 0,
+    "length": 0.0,
+    "width": 0.0,
     "mA_cm2": 0,
     "voltage_per_cell": 0.0,
     "number_of_cells": 0,
@@ -142,6 +154,7 @@ if __name__ == "__main__":
 
     handle_input(input_messages)
     battery = CalculateBatteryConnections(
+        input_values["area"],
         input_values["length"],
         input_values["width"],
         input_values["mA_cm2"],
@@ -149,3 +162,4 @@ if __name__ == "__main__":
         input_values["number_of_cells"],
     )
     battery.display(input_values["parallel"])
+    print(Style.RESET_ALL)
